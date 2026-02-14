@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Valentine 💖</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  height:100vh;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+/* PANEL */
+.panel{
+  width:95%;
+  max-width:900px;
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.3);
+  position:absolute;
+  transition:0.6s;
+}
+
+.hidden{
+  opacity:0;
+  pointer-events:none;
+  transform:scale(1.1);
+}
+
+h1{
+  color:#ff4e50;
+  margin-bottom:20px;
+}
+
+.button-row{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+  font-size:16px;
+  background:#ff4e50;
+  color:white;
+  transition:0.3s;
+}
+
+#noBtn{
+  background:#333;
+  position:relative;
+}
+
+/* Gift */
+.gift{
+  font-size:70px;
+  cursor:pointer;
+  margin:20px;
+  transition:0.3s;
+}
+.gift:hover{
+  transform:scale(1.2);
+}
+
+/* 12 Photos */
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:10px;
+  margin-top:20px;
+}
+
+.photo-grid img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:10px;
+  opacity:0;
+  transform:scale(0.7);
+  animation:photoFade 3.5s ease-in-out forwards;
+}
+
+@keyframes photoFade{
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+/* Single Photo */
+.single-photo img{
+  width:100%;
+  max-height:500px;
+  object-fit:contain;
+  border-radius:15px;
+}
+
+/* Love Letter */
+.letter{
+  border:8px solid #ff4e50;
+  padding:30px;
+  border-radius:15px;
+  background:#fff0f5;
+  text-align:left;
+  font-size:18px;
+  line-height:1.8;
+  box-shadow:0 0 20px rgba(0,0,0,0.2);
+}
+
+.next-btn{
+  margin-top:20px;
+}
+
+.song-btn{
+  margin-top:20px;
+  background:#333;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="surpriseSong" src="surprise.aac"></audio>
+<audio id="loveSong" src="love.aac"></audio>
+
+<!-- PAGE 1 -->
+<div class="panel" id="p1">
+  <h1>Hey ❤️</h1>
+  <p>I want to tell you something important...</p>
+  <button onclick="next(1)">Continue</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="panel hidden" id="p2">
+  <h1>You Mean Everything 💕</h1>
+  <p>You make my life beautiful and special ✨</p>
+  <button onclick="next(2)">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="panel hidden" id="p3">
+  <h1>Will You Be My Valentine? 💖</h1>
+  <div class="button-row">
+    <button onclick="showGift()">YES 😍</button>
+    <button id="noBtn">NO 🙈</button>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="panel hidden" id="p4">
+  <h1>Choose Your Surprise 🎁</h1>
+  <span class="gift" onclick="openPhotos()">🎁</span>
+</div>
+
+<!-- PAGE 5 -->
+<div class="panel hidden" id="p5">
+  <h1>Our Beautiful Memories 💖</h1>
+  <div class="photo-grid" id="photoGrid"></div>
+  <button class="next-btn" onclick="nextSingle()">Next</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="panel hidden" id="p6">
+  <div class="single-photo">
+    <img src="NM Photo.jpeg">
+  </div>
+  <button class="next-btn" onclick="showLetter()">Next</button>
+</div>
+
+<!-- PAGE 7 -->
+<div class="panel hidden" id="p7">
+  <div class="letter">
+    <h2>My Love 💌</h2>
+    <p>
+      From the moment you came into my life,
+      everything became more beautiful.
+      Your smile is my happiness,
+      your voice is my peace,
+      and your love is my strength.
+      <br><br>
+      I promise to stand by you,
+      support you, and love you forever.
+      You are my today,
+      my tomorrow,
+      and my always ❤️
+      <br><br>
+      Forever Yours 💖
+    </p>
+  </div>
+
+  <button class="song-btn" onclick="playLoveSong()">Play Our Song 🎵</button>
+</div>
+
+<script>
+
+function next(n){
+  document.getElementById("p"+n).classList.add("hidden");
+  document.getElementById("p"+(n+1)).classList.remove("hidden");
+}
+
+function showGift(){
+  document.getElementById("p3").classList.add("hidden");
+  document.getElementById("p4").classList.remove("hidden");
+}
+
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseenter",function(){
+  const moveX=(Math.random()*200)-100;
+  const moveY=(Math.random()*100)-50;
+  noBtn.style.transform="translate("+moveX+"px,"+moveY+"px)";
+});
+
+function openPhotos(){
+  document.getElementById("p4").classList.add("hidden");
+  document.getElementById("p5").classList.remove("hidden");
+
+  document.getElementById("surpriseSong").play();
+
+  const grid=document.getElementById("photoGrid");
+  grid.innerHTML="";
+
+  for(let i=1;i<=12;i++){
+    const img=document.createElement("img");
+    img.src="photo"+i+".jpeg";
+    img.style.animationDelay=(i*0.8)+"s";
+    grid.appendChild(img);
+  }
+}
+
+function nextSingle(){
+  document.getElementById("p5").classList.add("hidden");
+  document.getElementById("p6").classList.remove("hidden");
+}
+
+function showLetter(){
+  document.getElementById("p6").classList.add("hidden");
+  document.getElementById("p7").classList.remove("hidden");
+}
+
+function playLoveSong(){
+  document.getElementById("loveSong").play();
+}
+
+</script>
+
+</body>
+</html>
